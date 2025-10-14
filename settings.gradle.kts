@@ -71,11 +71,11 @@ includeBuild("build-logic")
 
 include("worldedit-libs")
 
-listOf("1.20.2", "1.20.4", "1.20.6", "1.21", "1.21.3", "1.21.4").forEach {
+listOf("1.21").forEach {
     include("worldedit-bukkit:adapters:adapter-$it")
 }
 
-listOf("bukkit", "core", "fabric", "neoforge", "sponge", "cli").forEach {
+listOf("bukkit", "core", "cli").forEach {
     include("worldedit-libs:$it")
     include("worldedit-$it")
 }
