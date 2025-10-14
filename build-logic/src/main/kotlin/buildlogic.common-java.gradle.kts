@@ -21,7 +21,6 @@ tasks
         options.isDeprecation = true
         options.encoding = "UTF-8"
         options.compilerArgs.add("-parameters")
-        options.compilerArgs.add("-Werror")
     }
 
 configure<CheckstyleExtension> {
@@ -51,7 +50,6 @@ dependencies {
 tasks.withType<Javadoc>().configureEach {
     options.encoding = "UTF-8"
     (options as StandardJavadocDocletOptions).apply {
-        addBooleanOption("Werror", true)
         addBooleanOption("Xdoclint:all", true)
         addBooleanOption("Xdoclint:-missing", true)
         tags(

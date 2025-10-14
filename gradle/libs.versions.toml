@@ -28,7 +28,7 @@ parchment-mappings = "2024.11.10"
 sponge-vanillagradle = "0.2.1-20241006.183638-89"
 
 # Minimum versions we apply to make dependencies support newer Java
-minimumAsm = "9.7"
+minimumAsm = "9.8"
 minimumJdependency = "2.10"
 minimumTinyRemapper = "0.8.11"
 
@@ -75,7 +75,7 @@ mockito-junit-jupiter.module = "org.mockito:mockito-junit-jupiter"
 
 commonsCli = "commons-cli:commons-cli:1.4"
 
-paperApi = "io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT"
+paperApi = "com.mohistmc:mohistdev:1.21.1"
 paperLib = "io.papermc:paperlib:1.0.8"
 
 dummypermscompat = "com.sk89q:dummypermscompat:1.10"

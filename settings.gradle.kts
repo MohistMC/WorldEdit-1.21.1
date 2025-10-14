@@ -13,6 +13,7 @@ plugins {
 }
 dependencyResolutionManagement {
     repositories {
+        mavenLocal()
         maven {
             name = "EngineHub"
             url = uri("https://maven.enginehub.org/repo/")

@@ -39,9 +39,7 @@ dependencies {
     "api"(project(":worldedit-core"))
     "api"(project(":worldedit-libs:bukkit"))
 
-    "localImplementation"(libs.paperApi) {
-        exclude("junit", "junit")
-    }
+    "localImplementation"(libs.paperApi)
     "localImplementation"(platform(libs.log4j.bom)) {
         because("Spigot provides Log4J (sort of, not in API, implicitly part of server)")
     }

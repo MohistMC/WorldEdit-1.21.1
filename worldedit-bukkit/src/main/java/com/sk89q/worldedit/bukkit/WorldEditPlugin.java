@@ -216,35 +216,37 @@ public class WorldEditPlugin extends JavaPlugin implements TabCompleter {
             }
         });
         // Block & Item
-        Registry.MATERIAL.forEach(material -> {
-            String key = material.getKey().toString();
-            if (material.isBlock()) {
-                BlockType.REGISTRY.register(key, new BlockType(key, blockState -> {
-                    // TODO Use something way less hacky than this.
-                    ParserContext context = new ParserContext();
-                    context.setPreferringWildcard(true);
-                    context.setTryLegacy(false);
-                    context.setRestricted(false);
-                    try {
-                        FuzzyBlockState state = (FuzzyBlockState) WorldEdit.getInstance().getBlockFactory().parseFromInput(
-                                BukkitAdapter.adapt(blockState.getBlockType()).createBlockData().getAsString(), context
-                        ).toImmutableState();
-                        BlockState defaultState = blockState.getBlockType().getAllStates().get(0);
-                        for (Map.Entry<Property<?>, Object> propertyObjectEntry : state.getStates().entrySet()) {
-                            //noinspection unchecked
-                            defaultState = defaultState.with((Property<Object>) propertyObjectEntry.getKey(), propertyObjectEntry.getValue());
+        for (Material material : Material.BY_NAME.values()) {
+            if (!material.isLegacy()) {
+                String key = material.getKey().toString();
+                if (material.isBlock()) {
+                    BlockType.REGISTRY.register(key, new BlockType(key, blockState -> {
+                        // TODO Use something way less hacky than this.
+                        ParserContext context = new ParserContext();
+                        context.setPreferringWildcard(true);
+                        context.setTryLegacy(false);
+                        context.setRestricted(false);
+                        try {
+                            FuzzyBlockState state = (FuzzyBlockState) WorldEdit.getInstance().getBlockFactory().parseFromInput(
+                                    BukkitAdapter.adapt(blockState.getBlockType()).createBlockData().getAsString(), context
+                            ).toImmutableState();
+                            BlockState defaultState = blockState.getBlockType().getAllStates().get(0);
+                            for (Map.Entry<Property<?>, Object> propertyObjectEntry : state.getStates().entrySet()) {
+                                //noinspection unchecked
+                                defaultState = defaultState.with((Property<Object>) propertyObjectEntry.getKey(), propertyObjectEntry.getValue());
+                            }
+                            return defaultState;
+                        } catch (InputParseException e) {
+                            getLogger().log(Level.WARNING, "Error loading block state for " + key, e);
+                            return blockState;
                         }
-                        return defaultState;
-                    } catch (InputParseException e) {
-                        getLogger().log(Level.WARNING, "Error loading block state for " + key, e);
-                        return blockState;
-                    }
-                }));
+                    }));
+                }
+                if (material.isItem()) {
+                    ItemType.REGISTRY.register(key, new ItemType(key));
+                }
             }
-            if (material.isItem()) {
-                ItemType.REGISTRY.register(key, new ItemType(key));
-            }
-        });
+        }
         // Entity
         Registry.ENTITY_TYPE.forEach(entityType -> {
             String key = entityType.getKey().toString();
