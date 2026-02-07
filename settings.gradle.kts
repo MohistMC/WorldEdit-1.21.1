@@ -13,9 +13,14 @@ plugins {
 }
 dependencyResolutionManagement {
     repositories {
+        mavenLocal()
         maven {
             name = "EngineHub"
             url = uri("https://maven.enginehub.org/repo/")
+        }
+        maven {
+            name = "MohistMC"
+            url = uri("https://maven.mohistmc.com/")
         }
         ivy {
             url = uri("https://repo.enginehub.org/language-files/")
@@ -36,6 +41,7 @@ dependencyResolutionManagement {
             val allowedPrefixes = listOf(
                 "https://maven.enginehub.org",
                 "https://repo.maven.apache.org/maven2/",
+                "https://maven.mohistmc.com/",
                 "file:"
             )
 
@@ -71,15 +77,14 @@ includeBuild("build-logic")
 
 include("worldedit-libs")
 
-listOf("1.20.2", "1.20.4", "1.20.6", "1.21").forEach {
+listOf("1.21").forEach {
     include("worldedit-bukkit:adapters:adapter-$it")
 }
 
-listOf("bukkit", "core", "fabric", "neoforge", "sponge", "cli").forEach {
+listOf("bukkit", "core", "cli").forEach {
     include("worldedit-libs:$it")
     include("worldedit-$it")
 }
-include("worldedit-mod")
 include("worldedit-libs:core:ap")
 
 include("worldedit-core:doctools")

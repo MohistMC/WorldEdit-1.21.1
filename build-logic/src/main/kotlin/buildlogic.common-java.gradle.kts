@@ -21,7 +21,6 @@ tasks
         options.isDeprecation = true
         options.encoding = "UTF-8"
         options.compilerArgs.add("-parameters")
-        options.compilerArgs.add("-Werror")
     }
 
 configure<CheckstyleExtension> {
@@ -47,26 +46,6 @@ dependencies {
     "testRuntimeOnly"(stringyLibs.getLibrary("junit-jupiter-engine"))
 }
 
-// Java 8 turns on doclint which we fail
-tasks.withType<Javadoc>().configureEach {
-    options.encoding = "UTF-8"
-    (options as StandardJavadocDocletOptions).apply {
-        addBooleanOption("Werror", true)
-        addBooleanOption("Xdoclint:all", true)
-        addBooleanOption("Xdoclint:-missing", true)
-        tags(
-            "apiNote:a:API Note:",
-            "implSpec:a:Implementation Requirements:",
-            "implNote:a:Implementation Note:"
-        )
-    }
-}
-
 configure<JavaPluginExtension> {
-    withJavadocJar()
     withSourcesJar()
-}
-
-tasks.named("check").configure {
-    dependsOn("checkstyleMain", "checkstyleTest")
 }

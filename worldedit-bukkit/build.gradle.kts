@@ -106,6 +106,7 @@ tasks.named<ShadowJar>("shadowJar") {
             exclude(dependency("${it.group}:${it.name}"))
         }
     }
+    archiveFileName.set("worldedit-youer-${project.version}-1.jar")
 }
 
 tasks.named("assemble").configure {

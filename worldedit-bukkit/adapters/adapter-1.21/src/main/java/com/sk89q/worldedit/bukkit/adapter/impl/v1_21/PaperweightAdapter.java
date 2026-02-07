@@ -594,10 +594,39 @@ public final class PaperweightAdapter implements BukkitImplAdapter {
             } else if (state instanceof net.minecraft.world.level.block.state.properties.IntegerProperty) {
                 return new IntegerProperty(state.getName(), ImmutableList.copyOf(state.getPossibleValues()));
             } else {
-                throw new IllegalArgumentException("WorldEdit needs an update to support " + state.getClass().getSimpleName());
+                return new UnknownProperty(state.getName(), ImmutableList.copyOf(state.getPossibleValues()));
             }
         }
     });
+
+    // and add an internal class to handle unknown attribute types
+    private static class UnknownProperty<T extends Comparable<T>> implements Property<T> {
+        private final String name;
+        private final List<T> values;
+
+        public UnknownProperty(String name, List<T> values) {
+            this.name = name;
+            this.values = values;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public List<T> getValues() {
+            return values;
+        }
+
+        @Override
+        public T getValueFor(String value) {
+            return values.stream()
+                    .filter(v -> v.toString().equals(value))
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
 
     @SuppressWarnings({ "rawtypes" })
     @Override
@@ -608,7 +637,9 @@ public final class PaperweightAdapter implements BukkitImplAdapter {
             block.getStateDefinition();
         for (net.minecraft.world.level.block.state.properties.Property state : blockStateList.getProperties()) {
             Property<?> property = PROPERTY_CACHE.getUnchecked(state);
-            properties.put(property.getName(), property);
+            if (!(property instanceof UnknownProperty)) {
+                properties.put(property.getName(), property);
+            }
         }
         return properties;
     }

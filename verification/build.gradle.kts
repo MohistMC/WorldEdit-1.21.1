@@ -28,7 +28,7 @@ tasks.check {
 // Generic setup for all tasks
 // Pull the version before our current version.
 val baseVersion = "(,${rootProject.version.toString().substringBefore("-SNAPSHOT")}["
-for (projectFragment in listOf("bukkit", "cli", "core", "fabric", "neoforge", "sponge")) {
+for (projectFragment in listOf("bukkit", "cli", "core")) {
     val capitalizedFragment =
         projectFragment.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
     val proj = project(":worldedit-$projectFragment")
@@ -119,8 +119,4 @@ tasks.named<JapicmpTask>("checkCoreApiCompatibility") {
 tasks.named<JapicmpTask>("checkBukkitApiCompatibility") {
     // Internal Adapters are not API
     packageExcludes.add("com.sk89q.worldedit.bukkit.adapter*")
-}
-tasks.named<JapicmpTask>("checkFabricApiCompatibility") {
-    // Need to check against the reobf JAR
-    newClasspath.setFrom(project(":worldedit-fabric").tasks.named("remapJar"))
 }

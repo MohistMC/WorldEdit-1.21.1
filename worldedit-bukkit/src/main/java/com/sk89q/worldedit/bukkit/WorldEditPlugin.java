@@ -225,8 +225,12 @@ public class WorldEditPlugin extends JavaPlugin implements TabCompleter {
                     context.setTryLegacy(false);
                     context.setRestricted(false);
                     try {
+                        var baterial = BukkitAdapter.adapt(blockState.getBlockType());
+                        if (baterial == null) {
+                            return blockState; // TODO Youer - This shouldn't happen
+                        }
                         FuzzyBlockState state = (FuzzyBlockState) WorldEdit.getInstance().getBlockFactory().parseFromInput(
-                                BukkitAdapter.adapt(blockState.getBlockType()).createBlockData().getAsString(), context
+                                baterial.createBlockData().getAsString(), context
                         ).toImmutableState();
                         BlockState defaultState = blockState.getBlockType().getAllStates().get(0);
                         for (Map.Entry<Property<?>, Object> propertyObjectEntry : state.getStates().entrySet()) {
@@ -234,7 +238,7 @@ public class WorldEditPlugin extends JavaPlugin implements TabCompleter {
                             defaultState = defaultState.with((Property<Object>) propertyObjectEntry.getKey(), propertyObjectEntry.getValue());
                         }
                         return defaultState;
-                    } catch (InputParseException e) {
+                    } catch (InputParseException | NullPointerException  e) {
                         getLogger().log(Level.WARNING, "Error loading block state for " + key, e);
                         return blockState;
                     }

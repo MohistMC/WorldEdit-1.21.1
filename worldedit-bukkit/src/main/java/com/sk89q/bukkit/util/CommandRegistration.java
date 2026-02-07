@@ -20,13 +20,11 @@
 package com.sk89q.bukkit.util;
 
 import com.sk89q.util.ReflectionUtil;
-import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginIdentifiableCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -84,7 +82,6 @@ public class CommandRegistration {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     public CommandMap getCommandMap() {
         if (serverCommandMap != null) {
             return serverCommandMap;
@@ -93,15 +90,8 @@ public class CommandRegistration {
             return fallbackCommands;
         }
 
-        CommandMap commandMap = PaperLib.isPaper() ? Bukkit.getCommandMap() : ReflectionUtil.getField(plugin.getServer().getPluginManager(), "commandMap");
-        if (commandMap == null) {
-            Bukkit.getServer().getLogger().severe(plugin.getDescription().getName()
-                + ": Could not retrieve server CommandMap, using fallback instead!");
-            fallbackCommands = commandMap = new SimpleCommandMap(Bukkit.getServer());
-            Bukkit.getServer().getPluginManager().registerEvents(new FallbackRegistrationListener(fallbackCommands), plugin);
-        } else {
-            serverCommandMap = commandMap;
-        }
+        CommandMap commandMap = Bukkit.getCommandMap();
+        serverCommandMap = commandMap;
         return commandMap;
     }
 
