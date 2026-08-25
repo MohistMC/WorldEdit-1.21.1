@@ -470,11 +470,15 @@ public final class PaperweightAdapter implements BukkitImplAdapter {
                 stateContainer.getProperty(state.getKey().getName());
             Comparable<?> value = (Comparable) state.getValue();
             // we may need to adapt this value, depending on the source prop
-            if (property instanceof DirectionProperty) {
+            if (property instanceof DirectionProperty && !(value instanceof String)) {
                 Direction dir = (Direction) value;
                 value = adapt(dir);
             } else if (property instanceof net.minecraft.world.level.block.state.properties.EnumProperty) {
-                String enumName = (String) value;
+                // Values are usually Strings, but may be Directions when a DirectionalProperty
+                // does not map to a vanilla DirectionProperty (e.g. modded EnumProperty<Direction>).
+                String enumName = value instanceof String
+                    ? (String) value
+                    : value.toString().toLowerCase(Locale.ROOT);
                 value = ((net.minecraft.world.level.block.state.properties.EnumProperty<?>) property)
                     .getValue(enumName).orElseThrow(() ->
                         new IllegalStateException(
