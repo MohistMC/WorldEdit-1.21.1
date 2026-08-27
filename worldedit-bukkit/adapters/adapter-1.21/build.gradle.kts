@@ -6,5 +6,5 @@ plugins {
 
 dependencies {
     // https://repo.papermc.io/service/rest/repository/browse/maven-public/io/papermc/paper/dev-bundle/
-    the<PaperweightUserDependenciesExtension>().paperDevBundle("1.21-R0.1-20240807.125219-129")
+    the<PaperweightUserDependenciesExtension>().paperDevBundle("1.21.1-R0.1-20250328.161643-128")
 }

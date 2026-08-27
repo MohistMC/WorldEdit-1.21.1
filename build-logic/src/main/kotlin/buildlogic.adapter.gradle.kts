@@ -16,6 +16,20 @@ repositories {
     maven {
         name = "EngineHub"
         url = uri("https://maven.enginehub.org/repo/")
+        content {
+            // EngineHub mirrors Yarn metadata but not all artifacts (e.g. mergedv2),
+            // which breaks Paperweight's paramMappings resolution (Gradle does not
+            // fall back to other repositories once a POM is found).
+            excludeModule("net.fabricmc", "yarn")
+        }
+    }
+    maven {
+        name = "PaperMC"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
+    maven {
+        name = "FabricMC"
+        url = uri("https://maven.fabricmc.net/")
     }
     mavenCentral()
     afterEvaluate {
